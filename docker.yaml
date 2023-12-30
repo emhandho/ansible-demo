@@ -1,0 +1,23 @@
+# dibawah ini adalah task/module untuk menghentikan container mycontainer pada docker
+- name: Stop a container
+  docker_container:
+    name: mycontainer
+    state: stopped
+
+# dibawah ini adalah task/module untuk menyematkan volume data
+# pada container yang dijalankan dari docker image sandbox
+- name: Create a data Container
+  docker_container:
+    name: mydata
+    image: sandbox
+    volumes:
+      - /data
+
+# dibawah ini adalah task/module menjalankan container dari docker image postgres:latest
+# dan menyematkan network pada container tersebut
+- name: Create db Container and connect to network
+  docker_container:
+    name: db_test
+    image: "postgres:latest"
+    networks:
+      - name: "{{ docker_network_name }}"

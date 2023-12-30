@@ -1,0 +1,17 @@
+hosts: webserver
+remote_user: root
+tasks:
+  - name: Make sure a service is running
+    systemd:
+      state: started
+      name: httpd
+
+  - name: Stop service cron on Debian, if running
+    systemd:
+      state: stopped
+      name: cron
+
+  - name: reload service httpd, in all cases
+    systemd:
+      state: reloaded
+      name: httpd

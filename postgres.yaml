@@ -1,0 +1,21 @@
+hosts: databases
+remote_user: root
+vars:
+  table_name: foo
+
+tasks:
+  - name: Set owner to someuser
+    postgresql_table:
+      name: { { table_name } }
+      owner: someuser
+
+  - name: Rename table {{ table_name }} to bar
+    postgresql_table:
+      table: { { table_name } }
+      rename: bar
+
+  - name: Drop table bar cascade
+    postgresql_table:
+      name: bar
+      state: absent
+      cascade: yes

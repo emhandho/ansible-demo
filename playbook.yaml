@@ -1,0 +1,41 @@
+- name: edit dan hapus table
+  hosts: databases
+  remote_user: root
+  vars:
+    table_name: foo
+
+  tasks:
+    - name: Set owner to someuser
+      postgresql_table:
+        name: { { table_name } }
+        owner: someuser
+
+    - name: Rename table {{ table_name }} to bar
+      postgresql_table:
+        table: { { table_name } }
+        rename: bar
+
+    - name: Drop table bar cascade
+      postgresql_table:
+        name: bar
+        state: absent
+      cascade: yes
+
+- name: start, stop and reload httpd
+  hosts: webserver
+  remote_user: root
+  tasks:
+    - name: Make sure a service is running
+      systemd:
+        state: started
+        name: httpd
+
+    - name: Stop service cron on Debian, if running
+      systemd:
+        state: stopped
+        name: cron
+
+    - name: reload service httpd, in all cases
+      systemd:
+        state: reloaded
+        name: httpd
